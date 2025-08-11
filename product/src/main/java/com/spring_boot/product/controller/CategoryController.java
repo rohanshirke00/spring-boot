@@ -30,10 +30,21 @@ public class CategoryController {
     }
 
     // show single category
+    @GetMapping("/{id}")
+    public CategoryDTO getCategory(@PathVariable Long id){
+        return categoryService.getCategory(id);
+    }
 
     // update category
+    @PutMapping("/{id}")
+    public CategoryDTO updateCategory(@PathVariable Long id, @RequestBody CategoryDTO categoryDTO){
+        return categoryService.updateCategory(id, categoryDTO);
+    }
 
     // delete category
-
+    @DeleteMapping("/{id}")
+    public String deleteCategory(@PathVariable Long id){
+        return categoryService.deleteCategory(id);
+    }
 
 }

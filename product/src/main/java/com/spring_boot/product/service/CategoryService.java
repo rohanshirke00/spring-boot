@@ -28,10 +28,25 @@ public class CategoryService {
     }
 
     // get category by id
+    public CategoryDTO getCategory(Long id){
+        Category category = categoryRepository.findById(id).orElseThrow(()-> new RuntimeException("Category not found!"));
+        return CategoryMapper.toCategoryDTO(category);
+    }
 
     // update category
+    public CategoryDTO updateCategory(Long id, CategoryDTO categoryDTO){
+        Category category = categoryRepository.findById(id).orElseThrow(()-> new RuntimeException("Category not found!"));
+        category.setName(categoryDTO.getName());
+        categoryRepository.save(category);
+        return CategoryMapper.toCategoryDTO(category);
+
+    }
 
     // delete category
+    public String deleteCategory(Long id){
+        categoryRepository.deleteById(id);
+        return "Category with id: " + id + " has been deleted";
+    }
 
 
 
