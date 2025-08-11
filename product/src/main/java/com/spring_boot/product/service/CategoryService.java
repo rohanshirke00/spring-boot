@@ -7,6 +7,8 @@ import com.spring_boot.product.repository.CategoryRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class CategoryService {
@@ -21,6 +23,9 @@ public class CategoryService {
     }
 
     // get all categories
+    public List<CategoryDTO> getCategories(){
+        return categoryRepository.findAll().stream().map(CategoryMapper::toCategoryDTO).toList();
+    }
 
     // get category by id
 
