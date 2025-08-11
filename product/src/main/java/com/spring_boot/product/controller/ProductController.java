@@ -6,10 +6,9 @@ import com.spring_boot.product.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
@@ -19,6 +18,10 @@ public class ProductController {
     private ProductService productService;
 
     // get all products
+    @GetMapping
+    public List<ProductDTO> getProducts(){
+        return productService.getProducts();
+    }
 
     // create product
     @PostMapping
@@ -27,8 +30,20 @@ public class ProductController {
     }
 
     // get single product
+    @GetMapping("/{id}")
+    public ProductDTO getProduct(@PathVariable Long id){
+        return productService.getProduct(id);
+    }
 
     // update product
+    @PutMapping("/{id}")
+    public ProductDTO updateProduct(@PathVariable Long id,@RequestBody ProductDTO productDTO){
+        return productService.updateProduct(id, productDTO);
+    }
 
     // delete product
+    @DeleteMapping("/{id}")
+    public String deleteProduct(@PathVariable Long id){
+        return productService.deleteProduct(id);
+    }
 }
