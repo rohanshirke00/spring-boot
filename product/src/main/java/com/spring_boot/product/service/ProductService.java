@@ -3,6 +3,8 @@ package com.spring_boot.product.service;
 import com.spring_boot.product.dto.ProductDTO;
 import com.spring_boot.product.entity.Category;
 import com.spring_boot.product.entity.Product;
+import com.spring_boot.product.exception.CategoryNotFoundException;
+import com.spring_boot.product.exception.ProductNotFoundException;
 import com.spring_boot.product.mapper.ProductMapper;
 import com.spring_boot.product.repository.CategoryRepository;
 import com.spring_boot.product.repository.ProductRepository;
@@ -24,7 +26,7 @@ public class ProductService {
         // from payload we get name, description, price, categoryId
         // now check whether category exist or not using categoryId
 
-        Category category = categoryRepository.findById(productDTO.getCategoryId()).orElseThrow(()-> new RuntimeException("Category not found!"));
+        Category category = categoryRepository.findById(productDTO.getCategoryId()).orElseThrow(()-> new CategoryNotFoundException("Category id: " + productDTO.getCategoryId() + " not found!"));
 
         // DTO -> Entity
         Product product = ProductMapper.toProductEntity(productDTO, category);
@@ -45,14 +47,14 @@ public class ProductService {
 
     // get a product by id
     public ProductDTO getProduct(Long id){
-        Product product = productRepository.findById(id).orElseThrow(()-> new RuntimeException("Product not found!"));
+        Product product = productRepository.findById(id).orElseThrow(()-> new ProductNotFoundException("Product id: " + id + " not found!"));
         return ProductMapper.toProductDTO(product);
     }
 
     // update a product
     public ProductDTO updateProduct(Long id, ProductDTO productDTO){
-        Product product = productRepository.findById(id).orElseThrow(()-> new RuntimeException("Product not found!"));
-        Category category = categoryRepository.findById(productDTO.getCategoryId()).orElseThrow(()-> new RuntimeException("Category not found!"));
+        Product product = productRepository.findById(id).orElseThrow(()-> new ProductNotFoundException("Product id: " + id + " not found!"));
+        Category category = categoryRepository.findById(productDTO.getCategoryId()).orElseThrow(()-> new CategoryNotFoundException("Category id: " + productDTO.getCategoryId() + " not found!"));
 
         product.setName(productDTO.getName());
         product.setDescription(productDTO.getDescription());
@@ -65,6 +67,7 @@ public class ProductService {
 
     // delete a product
     public String deleteProduct(Long id){
+        Product product = productRepository.findById(id).orElseThrow(()-> new ProductNotFoundException("Product id: " + id + " not found!"));
         productRepository.deleteById(id);
         return "Product with id: " + id + " has been deleted";
     }
